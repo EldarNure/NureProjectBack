@@ -1,0 +1,32 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: backend
+    ports:
+      - "5050:5050"
+    depends_on:
+      - arangodb
+    environment:
+      - DATABASE_HOST=arangodb
+      - DATABASE_PORT=8529
+      - DATABASE_NAME=nure_project
+      - DATABASE_USER=root
+      - DATABASE_PASSWORD=admin1
+    volumes:
+      - .:/app
+
+  arangodb:
+    image: arangodb
+    container_name: arangodb
+    ports:
+      - "8529:8529"
+    environment:
+      - ARANGO_ROOT_PASSWORD=admin1
+    volumes:
+      - arango-data:/var/lib/arangodb3
+
+volumes:
+  arango-data:
+    driver: local
